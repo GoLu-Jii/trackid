@@ -1,91 +1,61 @@
-import { forwardRef } from "react";
-import { ASSETS } from "../../content/assets";
-import { REVEAL_COPY } from "../../content/copy";
+import { useEffect, useRef } from 'react';
+import { motion, useAnimation } from 'framer-motion';
+import { COPY } from '../../content/copy';
 
-const PARTS = [
-  {
-    cls: "shell-outer",
-    image: ASSETS.exploded.shellOuter,
-    label: REVEAL_COPY.labels.outerShell,
-    size: "w-40",
-  },
-  {
-    cls: "shell-inner",
-    image: ASSETS.exploded.shellInner,
-    label: REVEAL_COPY.labels.innerShell,
-    size: "w-32",
-  },
-  {
-    cls: "pcb",
-    image: ASSETS.exploded.pcb,
-    label: REVEAL_COPY.labels.pcb,
-    size: "w-24",
-  },
-  {
-    cls: "battery",
-    image: ASSETS.exploded.battery,
-    label: REVEAL_COPY.labels.battery,
-    size: "w-24",
-  },
+const { annotations } = COPY.reveal;
+
+// Dummy colored layers — replace src with real images from assets.js later
+const LAYERS = [
+  { key: 'shell',   label: 'Shell',       color: '#C9A66B', dy: -120, dx: 0   },
+  { key: 'pcb',     label: 'PCB',         color: '#5C7691', dy: 0,    dx: -100 },
+  { key: 'battery', label: 'Battery',     color: '#4C7A63', dy: 0,    dx: 100  },
+  { key: 'gps',     label: 'GPS Antenna', color: '#9DB4C7', dy: 120,  dx: 0   },
 ];
 
-const RevealScene2D = forwardRef((props, ref) => {
+export default function RevealScene2D({ progress = 0 }) {
+  const layerRefs = useRef([]);
+  const labelRefs = useRef([]);
+
+  useEffect(() => {
+    LAYERS.forEach((layer, i) => {
+      const el = layerRefs.current[i];
+      if (!el) return;
+      el.style.transform = `translate(${layer.dx * progress}px, ${layer.dy * progress}px)`;
+    });
+
+    labelRefs.current.forEach((el, i) => {
+      if (!el) return;
+      el.style.opacity = progress > 0.5 ? (progress - 0.5) * 2 : 0;
+    });
+  }, [progress]);
+
   return (
-    <div
-      ref={ref}
-      className="relative w-full h-screen flex items-center justify-center"
-    >
-      {/* Title */}
+    <div className="relative w-64 h-64 mx-auto">
 
-      <div className="absolute top-16 left-1/2 -translate-x-1/2 z-40">
-        <h2 className="text-4xl font-bold text-white tracking-wide">
-          {REVEAL_COPY.title}
-        </h2>
-      </div>
-
-      {/* Hero Pendant */}
-
-      <img
-        src={ASSETS.pendants.classicTeardrop.heroImage}
-        alt="Pendant"
-        className="hero-pendant absolute left-1/2 top-1/2 w-[340px] -translate-x-1/2 -translate-y-1/2 object-contain z-20"
-      />
-
-      {/* Exploded View */}
-
-      <div className="exploded-view absolute inset-0">
-
-        {PARTS.map((part) => (
+      {LAYERS.map((layer, i) => (
+        <div
+          key={layer.key}
+          ref={el => layerRefs.current[i] = el}
+          className="absolute inset-0 flex items-center justify-center transition-none"
+          style={{ willChange: 'transform' }}
+        >
+          {/* Dummy colored block — swap for <img src={ASSETS.exploded[layer.key]} /> later */}
           <div
-            key={part.cls}
-            className={`${part.cls} exploded-part absolute left-1/2 top-1/2`}
+            className="w-24 h-24 rounded-xl opacity-80"
+            style={{ backgroundColor: layer.color }}
+          />
+
+          {/* Annotation label */}
+          <span
+            ref={el => labelRefs.current[i] = el}
+            className="absolute -right-28 font-mono text-xs uppercase tracking-widest text-accentDeep whitespace-nowrap"
+            style={{ opacity: 0 }}
           >
-            <div className="flex items-center gap-8">
+            {layer.label}
+          </span>
+        </div>
+      ))}
 
-              <img
-                src={part.image}
-                alt={part.label}
-                className={`${part.size} object-contain`}
-              />
-
-              <div className="connector">
-                <div className="connector-dot"></div>
-                <div className="connector-line"></div>
-              </div>
-
-              <div className="annotation">
-                {part.label}
-              </div>
-
-            </div>
-          </div>
-        ))}
-
-      </div>
     </div>
   );
-});
-
-RevealScene2D.displayName = "RevealScene2D";
-
-export default RevealScene2D;
+}

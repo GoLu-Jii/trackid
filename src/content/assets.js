@@ -10,6 +10,16 @@ export const ASSETS = {
       heroImage: "/assets/images/sweetheart-filigree-hero.png",
       thumbnail: "/assets/images/sweetheart-filigree-thumb.png",
     },
+    wiseOwl: {
+      model3d: null,
+      heroImage: '/assets/images/wise-owl-hero.png',
+      thumbnail: '/assets/images/wise-owl-thumb.png',
+    },
+    pathFinder: {
+      model3d: null,
+      heroImage: '/assets/images/path-finder-hero.png',
+      thumbnail: '/assets/images/path-finder-thumb.png',
+    },
   },
 
   exploded: {

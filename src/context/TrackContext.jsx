@@ -1,15 +1,33 @@
-import { createContext,useContext,useState} from "react";
+// src/context/TrackContext.jsx
+// Shared institutional/family track state.
+// Wrap <App /> in <TrackProvider>, consume with useTrack() in any section.
 
-const TrackContext = createContext();
-export const TrackProvider = ({children})=>{
-    const[activeTrack,setActiveTrack]=useState(null);
-    return(
-        <TrackContext.Provider value={{activeTrack,setActiveTrack}}>
-            {children}
-        </TrackContext.Provider>
-    );
-};
+import { createContext, useContext, useState } from 'react';
 
-export const useTrack =()=>useContext(TrackContext);
+const TrackContext = createContext(null);
 
-export default TrackContext;
+/**
+ * TrackProvider — wraps the app to provide track selection state.
+ * activeTrack: 'institutional' | 'family' | null
+ */
+export function TrackProvider({ children }) {
+  const [activeTrack, setActiveTrack] = useState(null);
+
+  return (
+    <TrackContext.Provider value={{ activeTrack, setActiveTrack }}>
+      {children}
+    </TrackContext.Provider>
+  );
+}
+
+/**
+ * useTrack — consumer hook for track state.
+ * Returns { activeTrack, setActiveTrack }.
+ */
+export function useTrack() {
+  const context = useContext(TrackContext);
+  if (context === null) {
+    throw new Error('useTrack must be used within a <TrackProvider>');
+  }
+  return context;
+}

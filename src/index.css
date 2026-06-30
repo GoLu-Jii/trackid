@@ -40,9 +40,6 @@
   flex-shrink: 0;
 }
 
-/* ==========================================================
-   SECTION 02 — REVEAL
-========================================================== */
 
 /* Hero Pendant */
 
@@ -120,4 +117,12 @@
 .annotation {
   backface-visibility: hidden;
   transform-style: preserve-3d;
+/* Reduced motion respect — CSS-level safety net.
+   JS-level checks via useReducedMotion() are the primary mechanism,
+   but this catches any raw CSS animations that slip through. */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }
