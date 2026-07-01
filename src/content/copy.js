@@ -42,14 +42,81 @@ export const COPY = {
   },
 
   complianceCase: {
-    eyebrow: 'The problem with trackers',
-    headline: 'A tracker a child refuses to wear protects no one.',
-    body: 'Placeholder — compliance/retention argument TBD.',
-    stats: [
-      { value: '—', label: 'Placeholder stat 1' }, // TODO: confirm stat
-      { value: '—', label: 'Placeholder stat 2' }, // TODO: confirm stat
-    ],
+  eyebrow: "Compliance Case",
+
+  headline: "A tracker a child refuses to wear protects no one.",
+
+  body:
+    "Traditional GPS trackers are often removed, forgotten or hidden. TrakID is designed as premium jewellery that children actually choose to wear.",
+
+  statistic: {
+    value: "XX%",
+    title: "Higher Daily Wear Compliance",
+    subtitle: "Compared with traditional GPS trackers",
   },
+
+  valueCards: [
+    {
+      title: "Acceptance",
+      description: "Designed to feel familiar and desirable.",
+    },
+    {
+      title: "Daily Wear",
+      description: "Comfort encourages consistent everyday use.",
+    },
+    {
+      title: "Continuous Safety",
+      description: "Protection only works when it's worn.",
+    },
+  ],
+
+  journey: [
+    "Removed",
+    "Hidden",
+    "Forgotten",
+    "Always Worn",
+  ],
+
+  comparison: [
+    {
+      traditional: "Looks like a gadget",
+      trakid: "Looks like jewellery",
+    },
+    {
+      traditional: "Bulky to wear",
+      trakid: "Comfortable all day",
+    },
+    {
+      traditional: "Frequently removed",
+      trakid: "Children wear it voluntarily",
+    },
+    {
+      traditional: "Lower compliance",
+      trakid: "Higher compliance",
+    },
+  ],
+
+  benefits: [
+    {
+      title: "Looks Like Jewellery",
+      description:
+        "Designed as an accessory children enjoy wearing.",
+    },
+    {
+      title: "Children Actually Wear It",
+      description:
+        "Comfortable, familiar and easy to wear every day.",
+    },
+    {
+      title: "Better Compliance",
+      description:
+        "Higher wear time leads to more reliable protection.",
+    },
+  ],
+
+  quote:
+    "When children wear it by choice, protection becomes continuous.",
+},
 
   engineeringCredibility: {
     eyebrow: 'Built to last',
@@ -85,35 +152,108 @@ export const COPY = {
   },
 
   anatomy: {
-    eyebrow: 'The collection',
-    headline: 'Crafted with intention.',
-    collectionItems: [
-      {
-        id: 'classicTeardrop',
-        name: 'The Classic Teardrop',
-        description: 'Placeholder — classic teardrop description TBD.',
-        motifNotes: ['Sapphire setting', 'Sterling silver'],
-      },
-      {
-        id: 'sweetheartFiligree',
-        name: 'The Sweetheart Filigree',
-        description: 'Placeholder — sweetheart filigree description TBD.',
-        motifNotes: ['Filigree detailing', 'Rose gold accent'],
-      },
-      {
-        id: 'wiseOwl',
-        name: 'The Wise Owl',
-        description: 'Placeholder — wise owl description TBD.',
-        motifNotes: ['Owl silhouette', 'Antique finish'],
-      },
-      {
-        id: 'pathFinder',
-        name: 'The Path Finder',
-        description: 'Placeholder — path finder description TBD.',
-        motifNotes: ['Compass rose', 'Brushed steel'],
-      },
-    ],
-  },
+  eyebrow: "The Collection",
+
+  headline: "Crafted for every personality.",
+
+  collectionItems: [
+    {
+      id: "classicTeardrop",
+
+      name: "Classic Teardrop",
+
+      description:
+        "Timeless elegance inspired by simplicity. Designed to blend seamlessly into everyday life while quietly carrying intelligent protection.",
+
+      motifNotes: [
+        {
+          title: "Sapphire Accent",
+          description: "Inspired by calm, clarity and confidence.",
+        },
+        {
+          title: "Sterling Finish",
+          description: "Elegant craftsmanship with lasting durability.",
+        },
+        {
+          title: "Smooth Contours",
+          description: "Comfortable enough for everyday wear.",
+        },
+      ],
+    },
+
+    {
+      id: "sweetheartFiligree",
+
+      name: "Sweetheart Filigree",
+
+      description:
+        "Delicate filigree patterns celebrate love, warmth and family, creating a pendant children are proud to wear.",
+
+      motifNotes: [
+        {
+          title: "Heart Motif",
+          description: "A symbol of care and connection.",
+        },
+        {
+          title: "Filigree Detail",
+          description: "Intricate craftsmanship inspired by heirloom jewellery.",
+        },
+        {
+          title: "Rose Gold Accent",
+          description: "Adds warmth and timeless elegance.",
+        },
+      ],
+    },
+
+    {
+      id: "wiseOwl",
+
+      name: "Wise Owl",
+
+      description:
+        "Inspired by wisdom and guidance, combining playful character with refined craftsmanship.",
+
+      motifNotes: [
+        {
+          title: "Owl Silhouette",
+          description: "Represents wisdom and protection.",
+        },
+        {
+          title: "Feather Texture",
+          description: "Adds subtle handcrafted detailing.",
+        },
+        {
+          title: "Antique Finish",
+          description: "Classic styling with modern technology inside.",
+        },
+      ],
+    },
+
+    {
+      id: "pathFinder",
+
+      name: "Path Finder",
+
+      description:
+        "A modern interpretation of the compass, symbolising confidence, exploration and always finding the way home.",
+
+      motifNotes: [
+        {
+          title: "Compass Rose",
+          description: "Guidance in every direction.",
+        },
+        {
+          title: "Brushed Steel",
+          description: "Clean, modern and durable.",
+        },
+        {
+          title: "Explorer Design",
+          description: "Created for curious young adventurers.",
+        },
+      ],
+    },
+  ],
+},
 
   peaceOfMind: {
     eyebrow: 'Peace of mind, visualized',

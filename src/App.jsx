@@ -17,15 +17,15 @@ gsap.registerPlugin(ScrollTrigger);
 // Do NOT reorder: this IS the page's visual sequence.
 // -------------------------------------------------------------------
 import Hero from './sections/01-Hero/Hero';
-// import Reveal from './sections/02-Reveal/Reveal';
+import Reveal from './sections/02-Reveal/Reveal';
 // import Fork from './sections/03-Fork/Fork';
-// import ComplianceCase from './sections/04A-ComplianceCase/ComplianceCase';
-// import Anatomy from './sections/04B-Anatomy/Anatomy';
-// import EngineeringCredibility from './sections/05A-EngineeringCredibility/EngineeringCredibility';
+import ComplianceCase from './sections/04A-ComplianceCase/ComplianceCase';
+import Anatomy from './sections/04B-Anatomy/Anatomy';
+import EngineeringCredibility from './sections/05A-EngineeringCredibility/EngineeringCredibility';
 // import PeaceOfMind from './sections/05B-PeaceOfMind/PeaceOfMind';
-// import InstitutionalAsk from './sections/06A-InstitutionalAsk/InstitutionalAsk';
+import InstitutionalAsk from './sections/06A-InstitutionalAsk/InstitutionalAsk';
 // import Invitation from './sections/06B-Invitation/Invitation';
-// import Closing from './sections/07-Closing/Closing';
+import Closing from './sections/07-Closing/Closing';
 
 function App() {
   // ---------------------------------------------------------------
@@ -70,21 +70,21 @@ function App() {
 
         <Hero />
         {/* <Divider /> */}
-        {/* <Reveal /> */}
+        <Reveal />
         {/* <Divider /> */}
         {/* <Fork /> */}
         {/* <Divider /> */}
 
         {/* --- Institutional Track --- */}
-        {/* <ComplianceCase /> */}
+        <ComplianceCase />
         {/* <Divider /> */}
-        {/* <EngineeringCredibility /> */}
-        {/* <Divider /> */}
+        <EngineeringCredibility />
+        <Divider />
         {/* <InstitutionalAsk /> */}
         {/* <Divider /> */}
 
         {/* --- Family Track --- */}
-        {/* <Anatomy /> */}
+        <Anatomy />
         {/* <Divider /> */}
         {/* <PeaceOfMind /> */}
         {/* <Divider /> */}
@@ -92,41 +92,12 @@ function App() {
         {/* <Divider /> */}
 
         {/* --- Shared Closing --- */}
-        {/* <Closing /> */}
+        <Closing />
 
-          {/* ============================================================ */}
-          {/* Phase 1 infrastructure verification — remove after sections  */}
-          {/* are built. Shows that the design system is wired correctly.   */}
-          {/* ============================================================ */}
-          {/* <div className="max-w-6xl mx-auto px-6 py-20">
-            <p className="font-mono text-xs uppercase tracking-widest text-accentDeep mb-4">
-              Phase 1 — Infrastructure Verification
-            </p>
-            <h1 className="font-display text-4xl md:text-6xl font-medium mb-6">TrakID</h1>
-            <p className="text-base font-body text-slate leading-relaxed mb-8 max-w-2xl">
-              Beautiful enough to wear. Smart enough to never lose. — If you see Fraunces for
-              the heading, Inter for this paragraph, and the teardrop divider below, the
-              design system is wired correctly.
-            </p>
-
-            <Divider />
-
-            <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div className="h-16 rounded-md bg-ink" />
-              <div className="h-16 rounded-md bg-accent" />
-              <div className="h-16 rounded-md bg-gold" />
-              <div className="h-16 rounded-md bg-safe" />
-              <div className="h-16 rounded-md bg-parchment border" />
-              <div className="h-16 rounded-md bg-stone" />
-              <div className="h-16 rounded-md bg-slate" />
-              <div className="h-16 rounded-md bg-alert" />
-            </div>
-
-            <p className="font-mono text-xs text-slate mt-6">
-              ↑ ink · accent · gold · safe — all from tailwind.config.js tokens
-            </p>
-          </div> */}
-
+        {/* ============================================================ */}
+        {/* Phase 1 infrastructure verification — removed as actual      */}
+        {/* sections are now being built and integrated above.           */}
+        {/* ============================================================ */}
       </div>
     </TrackProvider>
   );
