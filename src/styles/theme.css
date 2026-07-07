@@ -1,0 +1,98 @@
+/* ==========================================================
+   TRAKID — GLOBAL THEME TOKENS
+   ----------------------------------------------------------
+   This is the ONLY file that should ever contain a raw color
+   value. Every section, component, and utility class in the
+   app pulls its color from these variables via tailwind.config.js
+   (see the `colors` block there — each token just points back
+   to the CSS variable of the same name).
+
+   To re-theme the entire site — light sections, dark sections,
+   buttons, borders, everything — change a value here. Nothing
+   else needs to be touched.
+
+   Format: "R G B" (space-separated, no commas, no #) — this is
+   required so Tailwind's opacity modifiers keep working, e.g.
+   bg-ink/85, text-parchment/70, border-gold/20, bg-stone/40.
+========================================================== */
+
+:root {
+  /* ---- Surfaces & text (dark theme sections + primary ink) ---- */
+  --color-ink:          14 16 19;     /* near-black — dark section backgrounds, primary text on light */
+
+  /* ---- Light-section surfaces (the palette redesigned for a premium, gallery-white feel) ---- */
+  --color-parchment:    250 250 249;  /* page canvas — soft, neutral off-white (replaces the old warm cream) */
+  --color-stone:        233 233 230; /* secondary surface / card alt / hairline borders — cool premium grey */
+
+  /* ---- Section-canvas rhythm — distinct grey/white tones used ONLY to vary
+     each light section's background as you scroll from one screen to the
+     next. Kept deliberately close in family to parchment/stone so nothing
+     ever looks jarring or off-brand — just a subtle shift in tone. ---- */
+  --color-surface-2:    243 242 240; /* barely deeper than parchment */
+  --color-surface-3:    236 235 232; /* light neutral grey */
+  --color-surface-4:    227 226 222; /* deeper neutral grey */
+
+  /* ---- Text ---- */
+  --color-slate:        102 107 114; /* secondary text, captions — refined neutral grey, not blue-grey */
+
+  /* ---- Brand accent (sapphire) ---- */
+  --color-accent:       140 163 183; /* semantic brand accent */
+  --color-accent-deep:  71 96 117;   /* darker accent — eyebrows/links on light backgrounds */
+
+  /* ---- Rare institutional accent ---- */
+  --color-gold:         188 152 96;  /* rose-gold — used sparingly, institutional/premium touches only */
+
+  /* ---- Status (muted, never stock traffic-light colors) ---- */
+  --color-safe:         76 122 99;   /* "safe zone" — muted sage */
+  --color-alert:        166 85 62;   /* "SOS" — muted brick */
+
+  /* ==========================================================
+     SECTION-CANVAS GRADIENTS
+     ----------------------------------------------------------
+     Each light section gets its own two-stop wash — a whisper
+     of color (never more than a few % saturation) layered over
+     the neutral white/grey base, so every screen feels distinct
+     as you scroll, without ever leaving the premium neutral
+     family or touching the dark sections / gold accent.
+  ========================================================== */
+  --grad-pearl-from:     255 255 255;  /* Reveal — crisp white → visible sapphire wash */
+  --grad-pearl-to:       227 234 240;
+
+  --grad-cloud-from:     255 255 255; /* Fork — crisp white → visible neutral grey (no warm cast) */
+  --grad-cloud-to:       218 218 218;
+
+  --grad-sage-from:      246 246 246; /* Compliance Case — parchment → visible neutral grey wash */
+  --grad-sage-to:        195 195 195;
+
+  --grad-steel-from:     241 242 243; /* Engineering Credibility — cool technical grey */
+  --grad-steel-to:       213 217 220;
+
+  --grad-frost-from:     255 255 255; /* Institutional Ask — crisp white → visible icy blue-grey */
+  --grad-frost-to:       220 231 237;
+
+  --grad-mist-from:      246 246 246; /* Anatomy — soft white → visible neutral grey */
+  --grad-mist-to:        216 218 220;
+
+  --grad-ash-from:       244 244 244; /* Invitation — visible neutral grey, no warm undertone */
+  --grad-ash-to:         210 210 210;
+
+  --grad-graphite-from:  236 236 234; /* Closing — deepest neutral grey, grounded finish */
+  --grad-graphite-to:    207 206 202;
+}
+
+/* ==========================================================
+   SECTION-CANVAS GRADIENT UTILITIES
+   ----------------------------------------------------------
+   One class per section, applied once on that section's root
+   element. Change the color a gradient uses by editing the
+   --grad-*-from / --grad-*-to variables above — nothing else
+   needs to change.
+========================================================== */
+.bg-tint-pearl     { background: linear-gradient(135deg, rgb(var(--grad-pearl-from))     0%, rgb(var(--grad-pearl-to))     100%); }
+.bg-tint-cloud     { background: linear-gradient(135deg, rgb(var(--grad-cloud-from))     0%, rgb(var(--grad-cloud-to))     100%); }
+.bg-tint-sage      { background: linear-gradient(135deg, rgb(var(--grad-sage-from))      0%, rgb(var(--grad-sage-to))      100%); }
+.bg-tint-steel     { background: linear-gradient(135deg, rgb(var(--grad-steel-from))     0%, rgb(var(--grad-steel-to))     100%); }
+.bg-tint-frost     { background: linear-gradient(135deg, rgb(var(--grad-frost-from))     0%, rgb(var(--grad-frost-to))     100%); }
+.bg-tint-mist      { background: linear-gradient(135deg, rgb(var(--grad-mist-from))      0%, rgb(var(--grad-mist-to))      100%); }
+.bg-tint-ash       { background: linear-gradient(135deg, rgb(var(--grad-ash-from))       0%, rgb(var(--grad-ash-to))       100%); }
+.bg-tint-graphite  { background: linear-gradient(135deg, rgb(var(--grad-graphite-from))  0%, rgb(var(--grad-graphite-to))  100%); }

@@ -1,8 +1,24 @@
 /* stylelint-disable at-rule-no-unknown */
+@import './styles/theme.css';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 /* stylelint-enable at-rule-no-unknown */
+
+/* ==========================================================
+   PREMIUM TYPOGRAPHY BASE
+   ----------------------------------------------------------
+   Tightening the display serif's tracking site-wide is what
+   separates an "expensive" editorial headline from a default
+   web-font look — every h1–h4 gets this automatically, no
+   className changes needed anywhere in the app.
+========================================================== */
+@layer base {
+  h1, h2, h3, h4 {
+    letter-spacing: -0.022em;
+    font-feature-settings: 'ss01' on, 'liga' on;
+  }
+}
 
 /* ==========================================================
    TRAKID GLOBAL STYLES
