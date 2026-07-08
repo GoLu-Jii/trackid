@@ -15,6 +15,7 @@ import FormField from "./FormField";
 import { COPY } from "../../content/copy";
 import { INSTITUTIONAL_FORM_FIELDS } from "../../content/formSchema";
 import { submitLead } from "../../services/leadSubmission";
+import { ASSETS } from "../../content/assets";
 
 import { fadeUp, staggerContainer } from "../../motion/variants";
 
@@ -76,83 +77,73 @@ export default function InstitutionalAsk() {
   }
 
   return (
-    <SectionWrapper id="institutional">
+    <SectionWrapper id="institutional" className="relative overflow-hidden bg-tint-frost">
+
+      {/* Ambient background image — subtle, light-washed so the form stays fully legible */}
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 bg-cover bg-center opacity-[0.32]"
+        style={{ backgroundImage: `url(${ASSETS.backgrounds.institutional})` }}
+      />
+      <div aria-hidden="true" className="absolute inset-0 bg-parchment/55" />
+
+      {/* Ambient gold glow — same accent language as the Anatomy dark panel,
+          so every dark section in the app reads as one consistent family. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -top-40 right-0 h-[420px] w-[420px] rounded-full bg-gold/10 blur-[140px]"
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -bottom-40 left-0 h-[360px] w-[360px] rounded-full bg-accent/10 blur-[140px]"
+      />
 
       <motion.div
         variants={staggerContainer}
         initial="hidden"
         whileInView="show"
         viewport={{ once: true, amount: 0.2 }}
-        className="grid gap-20 lg:grid-cols-[1fr_520px]"
+        className="relative z-10 grid gap-20 lg:grid-cols-[1fr_520px]"
       >
 
         {/* LEFT COLUMN */}
 
         <motion.div variants={fadeUp}>
 
-          <p className="font-mono uppercase tracking-[0.35em] text-accent text-sm">
+          <p className="font-mono uppercase tracking-[0.35em] text-accentDeep text-sm">
             {copy.eyebrow}
           </p>
 
-          <h2 className="mt-5 font-display text-5xl md:text-6xl text-ink leading-tight">
+          <h2 className="mt-5 font-display text-6xl md:text-7xl text-ink leading-tight">
             {copy.headline}
           </h2>
 
-          <p className="mt-6 max-w-xl text-lg leading-8 text-slate">
-            {copy.subtitle}
-          </p>
-
-          <div className="mt-14 space-y-8">
+          <div className="mt-14 space-y-6">
 
             {[
-              {
-                icon: ShieldCheck,
-                title: "Premium Wear Compliance",
-                text: "Children are more likely to wear jewellery than traditional trackers.",
-              },
-              {
-                icon: MapPinned,
-                title: "Real-time Protection",
-                text: "Reliable GPS technology with intelligent emergency features.",
-              },
-              {
-                icon: Users,
-                title: "Built for Institutions",
-                text: "Designed for schools, organisations and community programmes.",
-              },
-              {
-                icon: Building2,
-                title: "Pilot Programme",
-                text: "Evaluate TrakID with your institution before wider deployment.",
-              },
+              { icon: ShieldCheck, title: "Premium Wear Compliance" },
+              { icon: MapPinned, title: "Real-time Protection" },
+              { icon: Users, title: "Built for Institutions" },
+              { icon: Building2, title: "Pilot Programme" },
             ].map((item) => {
               const Icon = item.icon;
 
               return (
                 <div
                   key={item.title}
-                  className="flex items-start gap-5"
+                  className="flex items-center gap-5"
                 >
-                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-gold/20 bg-gold/5">
+                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-gold/25 bg-gold/10">
                     <Icon
                       size={24}
                       strokeWidth={1.8}
-                      className="text-accent"
+                      className="text-gold"
                     />
                   </div>
 
-                  <div>
-
-                    <h3 className="font-display text-2xl text-ink">
-                      {item.title}
-                    </h3>
-
-                    <p className="mt-2 leading-7 text-slate">
-                      {item.text}
-                    </p>
-
-                  </div>
-
+                  <h3 className="font-display text-2xl text-ink">
+                    {item.title}
+                  </h3>
                 </div>
               );
             })}
@@ -165,15 +156,15 @@ export default function InstitutionalAsk() {
 
         <motion.div
           variants={fadeUp}
-          className="rounded-[36px] border border-gold/20 bg-white/70 p-10 backdrop-blur-xl shadow-xl"
+          className="rounded-[36px] border border-gold/20 bg-white/70 p-10 backdrop-blur-xl shadow-2xl"
         >
             {submitted ? (
   <div className="flex min-h-[520px] flex-col items-center justify-center text-center">
-    <div className="flex h-20 w-20 items-center justify-center rounded-full bg-gold/10">
+    <div className="flex h-20 w-20 items-center justify-center rounded-full bg-gold/15">
       <ShieldCheck
         size={40}
         strokeWidth={2}
-        className="text-accent"
+        className="text-gold"
       />
     </div>
 
@@ -212,11 +203,12 @@ export default function InstitutionalAsk() {
         justify-center
         gap-3
         rounded-full
-        bg-accent
+        bg-gold
         px-8
         py-4
         font-medium
-        text-white
+        tracking-wide
+        text-ink
         transition-all
         duration-300
         hover:scale-[1.02]
@@ -241,7 +233,7 @@ export default function InstitutionalAsk() {
 
       </motion.div>
 
-      <Divider />
+      <Divider className="text-gold/40" />
 
     </SectionWrapper>
   );

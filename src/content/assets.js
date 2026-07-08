@@ -34,4 +34,10 @@ export const ASSETS = {
     soundOnIcon: "/assets/icons/sound-on.svg",
     soundOffIcon: "/assets/icons/sound-off.svg",
   },
+
+  backgrounds: {
+    fork: "/assets/images/fork-bg.jpg",
+    institutional: "/assets/images/institutional-bg.jpg",
+    complianceQuote: "/assets/images/compliance-quote-bg.jpg",
+  },
 };

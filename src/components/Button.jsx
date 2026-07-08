@@ -20,7 +20,7 @@ export default function Button({
   children,
   ...props
 }) {
-  const baseStyle = 'px-7 py-3 rounded-full text-sm font-body font-medium transition-colors duration-200 inline-flex items-center justify-center';
+  const baseStyle = 'px-7 py-3 rounded-full text-sm font-body font-medium tracking-wide transition-colors duration-200 inline-flex items-center justify-center';
   
   const variants = {
     primary: 'bg-ink text-parchment hover:bg-ink/85',
