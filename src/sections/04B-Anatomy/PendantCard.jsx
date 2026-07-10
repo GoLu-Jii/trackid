@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import { Plus, BadgeCheck } from "lucide-react";
 
 import { ASSETS } from "../../content/assets";
@@ -19,30 +19,7 @@ export default function PendantCard({ item }) {
   const backImage =
     ASSETS.pendants[item.id]?.backImage || image;
 
-  // ----- cursor-tracked 3D tilt -----
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-  const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [6, -6]), {
-    stiffness: 150,
-    damping: 18,
-  });
-  const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-6, 6]), {
-    stiffness: 150,
-    damping: 18,
-  });
-  const glowX = useTransform(mouseX, [-0.5, 0.5], ["20%", "80%"]);
-  const glowY = useTransform(mouseY, [-0.5, 0.5], ["20%", "80%"]);
-
-  function handleMouseMove(e) {
-    if (shouldReduceMotion || !cardRef.current) return;
-    const rect = cardRef.current.getBoundingClientRect();
-    mouseX.set((e.clientX - rect.left) / rect.width - 0.5);
-    mouseY.set((e.clientY - rect.top) / rect.height - 0.5);
-  }
-
   function handleMouseLeave() {
-    mouseX.set(0);
-    mouseY.set(0);
     setIsHovering(false);
   }
 
@@ -50,26 +27,23 @@ export default function PendantCard({ item }) {
     <motion.article
       ref={cardRef}
       {...fadeUp}
-      onMouseMove={handleMouseMove}
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={handleMouseLeave}
-      style={
-        shouldReduceMotion
-          ? undefined
-          : { rotateX, rotateY, transformPerspective: 1200 }
-      }
-      whileHover={shouldReduceMotion ? undefined : { y: -8 }}
+      whileHover={shouldReduceMotion ? undefined : { y: -8, scale: 1.015 }}
       transition={{ duration: 0.35, ease: EASE }}
       className="
         group
         relative
+        flex
+        h-full
+        flex-col
         overflow-hidden
-        rounded-[36px]
+        rounded-[32px]
         border
         border-gold/20
         bg-white/70
         backdrop-blur
-        p-10
+        p-8
         shadow-sm
         transition-[border-color,box-shadow]
         duration-300
@@ -77,11 +51,10 @@ export default function PendantCard({ item }) {
         hover:shadow-2xl
       "
     >
-      {/* Cursor-following glow, replaces the fixed corner blur */}
+      {/* Cursor-following glow, replaced with a centered glow that fades in on hover */}
       <motion.div
         aria-hidden="true"
-        className="pointer-events-none absolute h-64 w-64 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gold/20 blur-3xl opacity-0 transition-opacity duration-500 group-hover:opacity-100"
-        style={shouldReduceMotion ? undefined : { left: glowX, top: glowY }}
+        className="pointer-events-none absolute left-1/2 top-1/2 h-64 w-64 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gold/20 blur-3xl opacity-0 transition-opacity duration-500 group-hover:opacity-100"
       />
 
       {/* Holographic foil sweep — a jewellery-counter sheen that crosses the
@@ -117,7 +90,7 @@ export default function PendantCard({ item }) {
 
       {/* Image — click to flip to the back / engraving side */}
 
-      <div className="relative flex justify-center py-10" style={{ transformStyle: "preserve-3d" }}>
+      <div className="relative flex justify-center overflow-hidden py-5" style={{ transformStyle: "preserve-3d" }}>
         <button
           type="button"
           onClick={() => setShowBack((v) => !v)}
@@ -131,7 +104,7 @@ export default function PendantCard({ item }) {
               aria-hidden="true"
               animate={{ rotate: 360 }}
               transition={{ duration: isHovering ? 6 : 16, repeat: Infinity, ease: "linear" }}
-              className="pointer-events-none absolute -inset-6 rounded-full"
+              className="pointer-events-none absolute -inset-4 rounded-full"
               style={{
                 background:
                   "conic-gradient(from 0deg, transparent 0%, rgba(201,166,107,0.5) 12%, transparent 24%, transparent 50%, rgba(201,166,107,0.35) 62%, transparent 74%)",
@@ -146,8 +119,12 @@ export default function PendantCard({ item }) {
           <motion.div
             animate={{ rotateY: showBack ? 180 : 0 }}
             transition={{ duration: 0.6, ease: EASE }}
-            style={{ transformStyle: "preserve-3d" }}
-            className="relative w-[250px] lg:w-[280px]"
+            style={{
+              transformStyle: "preserve-3d",
+              width: 130,
+              height: 130,
+            }}
+            className="relative overflow-hidden rounded-2xl lg:!h-[150px] lg:!w-[150px]"
           >
             <motion.img
               src={image}
@@ -158,8 +135,8 @@ export default function PendantCard({ item }) {
                   : { y: [-3, 3, -3], rotate: [-1, 1, -1] }
               }
               transition={{ duration: 6, repeat: Infinity, ease: EASE }}
-              style={{ backfaceVisibility: "hidden" }}
-              className="w-full transition-transform duration-500 group-hover:scale-105"
+              style={{ backfaceVisibility: "hidden", objectFit: "contain" }}
+              className="h-full w-full transition-transform duration-500 group-hover:scale-105"
             />
             <img
               src={backImage}
@@ -167,8 +144,9 @@ export default function PendantCard({ item }) {
               style={{
                 backfaceVisibility: "hidden",
                 transform: "rotateY(180deg)",
+                objectFit: "contain",
               }}
-              className="absolute inset-0 w-full"
+              className="absolute inset-0 h-full w-full"
             />
           </motion.div>
           <span className="mt-3 block font-mono text-[10px] uppercase tracking-[0.25em] text-accent/70">
@@ -182,7 +160,7 @@ export default function PendantCard({ item }) {
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, ease: EASE }}
-          className="absolute left-0 top-8"
+          className="absolute left-0 top-5"
         >
           <div className="flex items-center gap-3">
             <span className="font-mono text-[11px] uppercase tracking-[0.25em] text-accent">
@@ -198,7 +176,7 @@ export default function PendantCard({ item }) {
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, ease: EASE }}
-          className="absolute right-0 bottom-10 text-right"
+          className="absolute right-0 bottom-6 text-right"
         >
           <div className="flex items-center justify-end gap-3">
             <div className="h-px w-12 bg-gold/40" />
@@ -209,43 +187,48 @@ export default function PendantCard({ item }) {
         </motion.div>
       </div>
 
-      {/* Name */}
-      <h3 className="mt-8 font-display text-4xl text-ink leading-tight">
-        {item.name}
-      </h3>
+      {/* Growable middle content — flex-1 lets this stretch so the footer
+          below always lands at the same y across cards, regardless of how
+          long each pendant's description or motif list is. */}
+      <div className="flex-1">
+        {/* Name */}
+        <h3 className="mt-6 font-display text-3xl text-ink leading-tight">
+          {item.name}
+        </h3>
 
-      {/* Description */}
-      <p className="mt-5 leading-8 text-slate text-lg">{item.description}</p>
+        {/* Description */}
+        <p className="mt-4 leading-7 text-slate text-base">{item.description}</p>
 
-      {/* Motifs */}
-      <div className="mt-10 space-y-6">
-        {item.motifNotes.map((note, index) => (
-          <motion.div
-            key={note.title}
-            initial={shouldReduceMotion ? false : { opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.45, delay: index * 0.08, ease: EASE }}
-            className="flex items-start gap-4"
-          >
-            <div className="mt-2 h-2 w-2 rounded-full bg-gold transition-transform duration-300 group-hover:scale-125" />
-            <div>
-              <p className="font-display text-lg text-ink">{note.title}</p>
-              <p className="mt-1 text-sm leading-6 text-slate">
-                {note.description}
-              </p>
-            </div>
-          </motion.div>
-        ))}
+        {/* Motifs */}
+        <div className="mt-8 space-y-4">
+          {item.motifNotes.map((note, index) => (
+            <motion.div
+              key={note.title}
+              initial={shouldReduceMotion ? false : { opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.45, delay: index * 0.08, ease: EASE }}
+              className="flex items-start gap-4"
+            >
+              <div className="mt-2 h-2 w-2 rounded-full bg-gold transition-transform duration-300 group-hover:scale-125" />
+              <div>
+                <p className="font-display text-base text-ink">{note.title}</p>
+                <p className="mt-1 text-sm leading-6 text-slate">
+                  {note.description}
+                </p>
+              </div>
+            </motion.div>
+          ))}
+        </div>
       </div>
 
-      <div className="mt-10 h-px w-full bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
+      <div className="mt-8 h-px w-full bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
 
       {/* Footer — now an actual disclosure trigger, not just static text */}
       <button
         type="button"
         onClick={() => setExpanded((v) => !v)}
-        className="mt-8 flex w-full items-center justify-between border-t border-gold/15 pt-6 text-left"
+        className="mt-6 flex w-full items-center justify-between border-t border-gold/15 pt-5 text-left"
       >
         <span className="font-mono text-xs uppercase tracking-[0.3em] text-accent">
           Craft Collection

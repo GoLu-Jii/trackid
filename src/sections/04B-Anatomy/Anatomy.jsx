@@ -243,54 +243,21 @@ function ScrambleText({ text, className = "", trigger = true, speed = 26 }) {
   return <span className={`font-mono ${className}`}>{display}</span>;
 }
 
-// ─── 3D Tilt wrapper — cursor-driven rotate + glare, dims siblings ────────
+// ─── Hover wrapper — simple lift, dims siblings ────────────────────────────
 function TiltCard({ children, className = "", dimmed, onHoverChange, reducedMotion }) {
-  const ref = useRef(null);
-  const rotateX = useMotionValue(0);
-  const rotateY = useMotionValue(0);
-  const glareX = useMotionValue(50);
-  const glareY = useMotionValue(50);
-
-  const handleMove = (e) => {
-    if (reducedMotion || !ref.current) return;
-    const rect = ref.current.getBoundingClientRect();
-    const px = (e.clientX - rect.left) / rect.width;
-    const py = (e.clientY - rect.top) / rect.height;
-    animate(rotateY, (px - 0.5) * 10, { duration: 0.2, ease: EASE });
-    animate(rotateX, (0.5 - py) * 10, { duration: 0.2, ease: EASE });
-    glareX.set(px * 100);
-    glareY.set(py * 100);
-  };
-
-  const handleLeave = () => {
-    animate(rotateX, 0, { duration: 0.4, ease: EASE });
-    animate(rotateY, 0, { duration: 0.4, ease: EASE });
-    onHoverChange?.(false);
-  };
-
   return (
     <motion.div
-      ref={ref}
-      style={{ rotateX, rotateY, transformPerspective: 1000 }}
       animate={{
         scale: dimmed ? 0.98 : 1,
         opacity: dimmed ? 0.6 : 1,
         filter: dimmed ? "blur(1px)" : "blur(0px)",
       }}
+      whileHover={reducedMotion ? undefined : { y: -8 }}
       transition={{ duration: 0.3, ease: EASE }}
-      onMouseMove={handleMove}
       onMouseEnter={() => onHoverChange?.(true)}
-      onMouseLeave={handleLeave}
+      onMouseLeave={() => onHoverChange?.(false)}
       className={`relative ${className}`}
     >
-      {!reducedMotion && (
-        <motion.div
-          style={{
-            background: `radial-gradient(240px circle at ${glareX.get()}% ${glareY.get()}%, rgba(201,166,107,0.14), transparent 70%)`,
-          }}
-          className="pointer-events-none absolute inset-0 rounded-[28px] z-10"
-        />
-      )}
       {children}
     </motion.div>
   );
@@ -558,7 +525,7 @@ export default function Anatomy() {
         </motion.div>
 
         {/* ==========================================================
-                            COLLECTION GRID — 3D tilt cards
+                            COLLECTION GRID — hover-lift cards
         ========================================================== */}
 
         <motion.div
@@ -567,12 +534,12 @@ export default function Anatomy() {
           className="relative z-10 mt-20 mb-16 grid gap-10 lg:grid-cols-2"
         >
           {filteredItems.map((item, idx) => (
-            <motion.div key={item.id} layout>
+            <motion.div key={item.id} layout className="h-full">
               <TiltCard
                 reducedMotion={shouldReduceMotion}
                 dimmed={hoveredPendant !== null && hoveredPendant !== idx}
                 onHoverChange={(isHovering) => setHoveredPendant(isHovering ? idx : null)}
-                className="rounded-[28px]"
+                className="h-full rounded-[28px]"
               >
                 <PendantCard item={item} />
               </TiltCard>
