@@ -12,12 +12,6 @@ export default function FormField({ field, value, error, onChange }) {
     error ? "border-red-400" : "border-gold/20 hover:border-accent/40",
   );
 
-  // Inline styles, not classes, for the height/padding: native <select>
-  // elements carry browser default vertical padding that can silently
-  // out-rank Tailwind utility classes (no !important), which is why the
-  // select box was rendering taller than the input boxes. Setting these
-  // as inline styles with explicit border-box sizing guarantees both
-  // controls resolve to the exact same pixel height.
   const controlStyle = {
     height: CONTROL_HEIGHT,
     paddingTop: 0,
@@ -31,11 +25,8 @@ export default function FormField({ field, value, error, onChange }) {
     <div className="space-y-2">
       <label htmlFor={field.name} className="block font-medium text-ink">
         {field.label}
-
         {field.required && <span className="ml-1 text-red-500">*</span>}
       </label>
-
-      {/* TEXTAREA */}
 
       {field.type === "textarea" ? (
         <textarea
@@ -49,27 +40,18 @@ export default function FormField({ field, value, error, onChange }) {
           className={clsx(baseClasses, "leading-normal resize-none")}
         />
       ) : field.type === "select" ? (
-        /* SELECT */
-
-        <select
-          id={field.name}
-          name={field.name}
-          value={value || ""}
-          onChange={onChange}
-          className={baseClasses}
-        >
-          <option value="">Select an option</option>
-
-          {field.options.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-
+        <div className="relative">
+          <select
+            id={field.name}
+            name={field.name}
+            value={value || ""}
+            onChange={onChange}
+            style={controlStyle}
+            className={baseClasses}
+          >
+            <option value="">Select an option</option>
             {field.options.map((option) => (
-              <option
-                key={option.value}
-                value={option.value}
-              >
+              <option key={option.value} value={option.value}>
                 {option.label}
               </option>
             ))}
@@ -81,8 +63,6 @@ export default function FormField({ field, value, error, onChange }) {
           />
         </div>
       ) : (
-        /* INPUT */
-
         <input
           id={field.name}
           name={field.name}
