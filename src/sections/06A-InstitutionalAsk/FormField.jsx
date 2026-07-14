@@ -3,7 +3,12 @@ import { ChevronDown } from "lucide-react";
 
 const CONTROL_HEIGHT = 54;
 
-export default function FormField({ field, value, error, onChange }) {
+export default function FormField({
+  field,
+  value,
+  error,
+  onChange,
+}) {
   const baseClasses = clsx(
     "w-full rounded-3xl border bg-white/70 backdrop-blur-sm px-5 py-4",
     "text-ink placeholder:text-slate/60",
@@ -14,7 +19,6 @@ export default function FormField({ field, value, error, onChange }) {
       : "border-gold/20 hover:border-accent/40"
   );
 
-  // Inline styles ensure native select/input resolve to identical heights.
   const controlStyle = {
     height: CONTROL_HEIGHT,
     paddingTop: 0,
@@ -26,13 +30,15 @@ export default function FormField({ field, value, error, onChange }) {
 
   return (
     <div className="space-y-2">
-      <label htmlFor={field.name} className="block font-medium text-ink">
+      <label
+        htmlFor={field.name}
+        className="block font-medium text-ink"
+      >
         {field.label}
-        {field.required && (
-          <span className="ml-1 text-red-500">*</span>
-        )}
+        {field.required && <span className="ml-1 text-red-500">*</span>}
       </label>
 
+      {/* TEXTAREA */}
       {field.type === "textarea" ? (
         <textarea
           id={field.name}
@@ -42,13 +48,18 @@ export default function FormField({ field, value, error, onChange }) {
           onChange={onChange}
           placeholder={field.placeholder}
           style={{
-            height: CONTROL_HEIGHT,
+            height: 110,
             padding: "14px 20px",
             boxSizing: "border-box",
           }}
-          className={clsx(baseClasses, "leading-normal resize-none")}
+          className={clsx(
+            baseClasses,
+            "leading-normal resize-none"
+          )}
         />
       ) : field.type === "select" ? (
+        
+        /* SELECT */
         <div className="relative">
           <select
             id={field.name}
@@ -56,15 +67,11 @@ export default function FormField({ field, value, error, onChange }) {
             value={value || ""}
             onChange={onChange}
             style={controlStyle}
-            className={clsx(baseClasses, "appearance-none pr-12")}
+            className={clsx(baseClasses, "appearance-none")}
           >
             <option value="">Select an option</option>
-
             {field.options.map((option) => (
-              <option
-                key={option.value}
-                value={option.value}
-              >
+              <option key={option.value} value={option.value}>
                 {option.label}
               </option>
             ))}
@@ -77,6 +84,8 @@ export default function FormField({ field, value, error, onChange }) {
           />
         </div>
       ) : (
+        
+        /* INPUT */
         <input
           id={field.name}
           name={field.name}
@@ -90,7 +99,9 @@ export default function FormField({ field, value, error, onChange }) {
       )}
 
       {error && (
-        <p className="text-sm text-red-500">{error}</p>
+        <p className="text-sm text-red-500">
+          {error}
+        </p>
       )}
     </div>
   );
