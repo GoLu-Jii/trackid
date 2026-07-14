@@ -307,8 +307,8 @@ function TiltCard({ children, className = "", onHoverChange, dimmed, reducedMoti
     const rect = ref.current.getBoundingClientRect();
     const px = (e.clientX - rect.left) / rect.width;
     const py = (e.clientY - rect.top) / rect.height;
-    animate(rotateY, (px - 0.5) * 14, { duration: 0.2, ease: EASE });
-    animate(rotateX, (0.5 - py) * 14, { duration: 0.2, ease: EASE });
+    animate(rotateY, (px - 0.5) * 6, { duration: 0.2, ease: EASE });
+    animate(rotateX, (0.5 - py) * 6, { duration: 0.2, ease: EASE });
     glareX.set(px * 100);
     glareY.set(py * 100);
   };
@@ -322,7 +322,7 @@ function TiltCard({ children, className = "", onHoverChange, dimmed, reducedMoti
   return (
     <motion.div
       ref={ref}
-      style={{ rotateX, rotateY, transformPerspective: 900 }}
+      style={{ rotateX, rotateY, transformPerspective: 2600 }}
       animate={{
         scale: dimmed ? 0.98 : 1,
         opacity: dimmed ? 0.55 : 1,
@@ -351,9 +351,7 @@ export default function Anatomy() {
   const shouldReduceMotion = useReducedMotion();
   const data = COPY.anatomy;
 
-  const [hoveredPendant, setHoveredPendant] = useState(null);
   const [activeFilter, setActiveFilter] = useState("All");
-  
   const filteredItems = data.collectionItems.filter(
     (item) => activeFilter === "All" || item.tag === activeFilter
   );
@@ -570,34 +568,40 @@ export default function Anatomy() {
 
         {/* ==========================================================
                 COLLECTION STACK — scroll-pinned card reveal.
-                Card 1 shows first; scrolling brings each next card up
-                from the bottom to overlap the one before it, and
+                The section is pinned (sticky) for one screen-height per
+                card. Card 1 fills the screen first; scrolling brings the
+                next card up from below to cover it completely, and
                 scrolling back up reverses the sequence.
         ========================================================== */}
 
-        <motion.div
-          layout
-          {...staggerContainer}
-          className="relative z-10 mt-20 mb-16 grid gap-12 lg:grid-cols-2 max-w-[1500px] mx-auto"
+        <div
+          ref={stackScrollRef}
+          style={{ height: `${Math.max(filteredItems.length, 1) * 100}vh` }}
+          className="relative mt-20 mb-16"
         >
-          {filteredItems.map((item, idx) => (
-            <motion.div key={item.id} layout className="h-full">
-              <TiltCard
-                reducedMotion={shouldReduceMotion}
-                dimmed={hoveredPendant !== null && hoveredPendant !== idx}
-                onHoverChange={(isHovering) => setHoveredPendant(isHovering ? idx : null)}
-                className="h-full rounded-[28px]"
+          <div className="sticky top-0 h-screen w-full overflow-hidden px-4 py-8 lg:px-10 lg:py-12">
+            {filteredItems.length === 0 && (
+              <p className="flex h-full items-center justify-center py-16 text-center font-mono text-sm uppercase tracking-[0.2em] text-slate">
+                No pieces in this category yet
+              </p>
+            )}
+            {filteredItems.map((item, idx) => (
+              <StackCard
+                key={item.id}
+                index={idx}
+                total={filteredItems.length}
+                progress={stackProgress}
               >
-                <PendantCard item={item} />
-              </TiltCard>
-            </motion.div>
-          ))}
-          {filteredItems.length === 0 && (
-            <p className="col-span-2 py-16 text-center font-mono text-sm uppercase tracking-[0.2em] text-slate">
-              No pieces in this category yet
-            </p>
-          )}
-        </motion.div>
+                <TiltCard
+                  reducedMotion={shouldReduceMotion}
+                  className="mx-auto h-full w-full max-w-[1400px] rounded-[28px]"
+                >
+                  <PendantCard item={item} index={idx + 1} total={filteredItems.length} />
+                </TiltCard>
+              </StackCard>
+            ))}
+          </div>
+        </div>
       </div>
 
       {/* Kinetic marquee of collection names — texture between grid and features */}
