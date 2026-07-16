@@ -86,9 +86,9 @@ export default function PendantScene({ scrollTransformRef }) {
             The pendant should never appear to glow too much, just glint. */}
         <EffectComposer disableNormalPass multisampling={4}>
           <Bloom
-            luminanceThreshold={0.6}
+            luminanceThreshold={0.7}
             mipmapBlur
-            intensity={0.5}
+            intensity={0.3}
             radius={0.4}
           />
         </EffectComposer>
