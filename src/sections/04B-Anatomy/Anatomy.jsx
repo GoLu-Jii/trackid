@@ -13,7 +13,6 @@ import {
   useMotionTemplate,
   useSpring,
   useTransform,
-  useInView,
   useScroll,
   animate,
 } from "framer-motion";
@@ -39,9 +38,31 @@ const FEATURES = [
 
 const FILTERS = ["All", "New", "Bestseller"];
 
-// ─── Radar Pulse — expanding GPS-signal rings, on-theme for a tracker ──────
+// ─── Aceternity-Style Dot Grid Background ────────────────────────────────
+function DotBackground() {
+  return (
+    <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-transparent z-0 overflow-hidden">
+      {/* The dot pattern - increased opacity and size for visibility */}
+      <div
+        className="absolute inset-0 opacity-80"
+        style={{
+          backgroundImage: `radial-gradient(rgba(201,166,107,0.35) 2px, transparent 2px)`,
+          backgroundSize: "40px 40px",
+          backgroundPosition: "center center",
+          // Broadened mask so it doesn't fade out too early
+          WebkitMaskImage: "radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%)",
+          maskImage: "radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%)",
+        }}
+      />
+      {/* Subtle ambient light in the center to highlight the pendant and text */}
+      <div className="absolute left-1/2 top-1/2 h-[800px] w-[800px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-accentDeep/10 blur-[130px]" />
+    </div>
+  );
+}
+
+// ─── Radar Pulse — expanding GPS-signal rings ────────────────────────────
 function RadarPulse({ tone = "gold", size = 340, ringCount = 3, reducedMotion }) {
-  const toneClass = tone === "gold" ? "border-gold/45" : "border-accent/45";
+  const toneClass = tone === "gold" ? "border-gold/20" : "border-accent/20";
   if (reducedMotion) return null;
   return (
     <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
@@ -51,7 +72,7 @@ function RadarPulse({ tone = "gold", size = 340, ringCount = 3, reducedMotion })
           style={{ width: size, height: size }}
           className={`absolute rounded-full border ${toneClass}`}
           animate={{ scale: [0.55, 1.35], opacity: [0.5, 0] }}
-          transition={{ duration: 3, repeat: Infinity, ease: "easeOut", delay: i * 1 }}
+          transition={{ duration: 3.5, repeat: Infinity, ease: "easeOut", delay: i * 1.1 }}
         />
       ))}
     </div>
@@ -68,10 +89,10 @@ function CapabilityHalo({ items, radius = 210, reducedMotion }) {
           return (
             <div
               key={f.title}
-              className="absolute left-1/2 top-1/2 flex h-11 w-11 -ml-[22px] -mt-[22px] items-center justify-center rounded-full border border-gold/25 bg-white/85 shadow-sm"
+              className="absolute left-1/2 top-1/2 flex h-11 w-11 -ml-[22px] -mt-[22px] items-center justify-center rounded-full border border-gold/15 bg-white/5 backdrop-blur-md shadow-sm"
               style={{ transform: `rotate(${angle}deg) translate(${radius}px) rotate(-${angle}deg)` }}
             >
-              <Icon size={16} strokeWidth={1.8} className="text-accent" />
+              <Icon size={16} strokeWidth={1.8} className="text-gold" />
             </div>
           );
         })}
@@ -98,9 +119,9 @@ function CapabilityHalo({ items, radius = 210, reducedMotion }) {
               animate={{ rotate: -360 }}
               transition={{ duration: 42, repeat: Infinity, ease: "linear" }}
               whileHover={{ scale: 1.15 }}
-              className="flex h-11 w-11 items-center justify-center rounded-full border border-gold/25 bg-white/85 backdrop-blur shadow-sm"
+              className="flex h-11 w-11 items-center justify-center rounded-full border border-gold/15 bg-white/5 backdrop-blur-md shadow-sm"
             >
-              <Icon size={16} strokeWidth={1.8} className="text-accent" />
+              <Icon size={16} strokeWidth={1.8} className="text-gold" />
             </motion.div>
           </div>
         );
@@ -137,21 +158,6 @@ function TextGenerate({ text, className = "", highlight = [] }) {
           </span>
         );
       })}
-      {highlight.length > 0 && (
-        <style>{`
-          .gold-shimmer-text {
-            background: linear-gradient(100deg, #9c7b3f 20%, #C9A66B 38%, #F3E2B8 50%, #C9A66B 62%, #9c7b3f 80%);
-            background-size: 240% auto;
-            background-clip: text;
-            -webkit-background-clip: text;
-            color: transparent;
-            animation: goldShimmer 5s linear infinite;
-          }
-          @keyframes goldShimmer {
-            to { background-position: -240% center; }
-          }
-        `}</style>
-      )}
     </span>
   );
 }
@@ -179,7 +185,6 @@ function renderHighlightedWords(text, highlightWords = []) {
   return nodes;
 }
 
-// One shared shimmer keyframe definition, rendered once wherever it's used.
 function GoldShimmerStyle() {
   return (
     <style>{`
@@ -198,7 +203,6 @@ function GoldShimmerStyle() {
   );
 }
 
-// ─── Scramble / decode text — random glyphs settle left → right ───────────
 const GLYPHS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ#%&$@*+=-";
 
 function ScrambleText({ text, className = "", trigger = true, speed = 26 }) {
@@ -247,7 +251,6 @@ function StackCard({ children, index, total, progress }) {
   );
 }
 
-// ─── Infinite marquee — duplicated track, pure CSS loop, edges feathered ──
 function Marquee({ items, className = "" }) {
   const track = [...items, ...items];
   return (
@@ -271,30 +274,6 @@ function Marquee({ items, className = "" }) {
   );
 }
 
-function StatNumber({ value, suffix, inView }) {
-  const ref = useRef(null);
-
-  useEffect(() => {
-    if (!inView || !ref.current) return;
-    const controls = animate(0, value, {
-      duration: 1.1,
-      ease: EASE,
-      onUpdate(v) {
-        if (ref.current) ref.current.textContent = Math.round(v).toString();
-      },
-    });
-    return () => controls.stop();
-  }, [inView, value]);
-
-  return (
-    <span className="font-display text-3xl text-ink">
-      <span ref={ref}>0</span>
-      <span className="ml-0.5 text-base text-accent">{suffix}</span>
-    </span>
-  );
-}
-
-// ─── 3D Tilt Card — cursor-driven tilt + glare, dims siblings ──────────────
 function TiltCard({ children, className = "", onHoverChange, dimmed, reducedMotion }) {
   const ref = useRef(null);
   const rotateX = useMotionValue(0);
@@ -367,17 +346,14 @@ export default function Anatomy() {
     [data.collectionItems]
   );
 
-  const stripRef = useRef(null);
-  const stripInView = useInView(stripRef, { once: true, margin: "-80px" });
-
-  // ----- hero pendant parallax, follows cursor across the whole hero -----
+  // ----- hero pendant parallax -----
   const heroRef = useRef(null);
   const mvX = useMotionValue(0);
   const mvY = useMotionValue(0);
-  const px = useSpring(useTransform(mvX, [-0.5, 0.5], [-14, 14]), { stiffness: 80, damping: 16 });
-  const py = useSpring(useTransform(mvY, [-0.5, 0.5], [-14, 16]), { stiffness: 80, damping: 16 });
-  const tiltX = useSpring(useTransform(mvY, [-0.5, 0.5], [10, -10]), { stiffness: 90, damping: 14 });
-  const tiltY = useSpring(useTransform(mvX, [-0.5, 0.5], [-10, 10]), { stiffness: 90, damping: 14 });
+  const px = useSpring(useTransform(mvX, [-0.5, 0.5], [-10, 10]), { stiffness: 80, damping: 16 });
+  const py = useSpring(useTransform(mvY, [-0.5, 0.5], [-10, 10]), { stiffness: 80, damping: 16 });
+  const tiltX = useSpring(useTransform(mvY, [-0.5, 0.5], [8, -8]), { stiffness: 90, damping: 14 });
+  const tiltY = useSpring(useTransform(mvX, [-0.5, 0.5], [-8, 8]), { stiffness: 90, damping: 14 });
 
   function handleHeroMove(e) {
     if (shouldReduceMotion || !heroRef.current) return;
@@ -386,14 +362,13 @@ export default function Anatomy() {
     mvY.set((e.clientY - rect.top) / rect.height - 0.5);
   }
 
-  // ----- cursor spotlight over the collection section -----
-  // A jeweller's loupe follows the cursor while browsing pieces closely.
+  // ----- collection spotlight -----
   const collectionRef = useRef(null);
   const spotX = useMotionValue(50);
   const spotY = useMotionValue(50);
   const spotXSpring = useSpring(spotX, { stiffness: 60, damping: 20 });
   const spotYSpring = useSpring(spotY, { stiffness: 60, damping: 20 });
-  const spotlightBg = useMotionTemplate`radial-gradient(560px circle at ${spotXSpring}% ${spotYSpring}%, rgba(201,166,107,0.10), transparent 62%)`;
+  const spotlightBg = useMotionTemplate`radial-gradient(560px circle at ${spotXSpring}% ${spotYSpring}%, rgba(201,166,107,0.08), transparent 62%)`;
 
   function handleCollectionMove(e) {
     if (shouldReduceMotion || !collectionRef.current) return;
@@ -403,19 +378,22 @@ export default function Anatomy() {
   }
 
   return (
-    <SectionWrapper id="anatomy">
+    <SectionWrapper id="anatomy" className="relative pt-12 overflow-visible">
+      <GoldShimmerStyle />
+      <DotBackground />
+
       {/* ==========================================================
-                            HERO
+                            HERO (STACKED LAYOUT)
       ========================================================== */}
 
       <motion.div
         {...staggerContainer}
         onMouseMove={handleHeroMove}
         onMouseLeave={() => { mvX.set(0); mvY.set(0); }}
-        className="relative grid items-center gap-20 lg:grid-cols-[1.1fr_0.9fr]"
+        className="relative z-10 flex flex-col items-center justify-center gap-16 min-h-[70vh] py-16"
       >
-        {/* LEFT */}
-        <motion.div {...fadeUp} className="space-y-8">
+        {/* TOP COPY - Center Aligned, Full Width */}
+        <motion.div {...fadeUp} className="space-y-8 relative z-20 flex flex-col items-center text-center w-full">
           <ScrambleText
             text={data.eyebrow}
             className="uppercase tracking-[0.35em] text-accent text-sm block"
@@ -426,74 +404,67 @@ export default function Anatomy() {
             whileInView={{ scaleX: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, ease: EASE }}
-            style={{ originX: 0 }}
-            className="h-[2px] w-12 rounded-full bg-gold"
+            style={{ originX: 0.5 }}
+            className="h-[2px] w-12 rounded-full bg-gold mx-auto"
           />
 
-          <GoldShimmerStyle />
-          <h2 className="font-display text-5xl md:text-6xl xl:text-7xl leading-[1.05] text-ink max-w-xl">
+          <h2 className="font-display text-5xl md:text-7xl xl:text-[80px] leading-[1.05] text-ink max-w-5xl mx-auto">
             <motion.div
-              initial={shouldReduceMotion ? false : { opacity: 0, y: -70, rotate: -2 }}
-              whileInView={{ opacity: 1, y: 0, rotate: 0 }}
+              initial={shouldReduceMotion ? false : { opacity: 0, y: -40 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-60px" }}
               transition={{ type: "spring", stiffness: 110, damping: 13, delay: 0 }}
             >
               {renderHighlightedWords("Crafted for every personality.", ["personality"])}
             </motion.div>
             <motion.div
-              initial={shouldReduceMotion ? false : { opacity: 0, y: -70, rotate: 2 }}
-              whileInView={{ opacity: 1, y: 0, rotate: 0 }}
+              initial={shouldReduceMotion ? false : { opacity: 0, y: -40 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-60px" }}
-              transition={{ type: "spring", stiffness: 110, damping: 13, delay: 0.18 }}
+              transition={{ type: "spring", stiffness: 110, damping: 13, delay: 0.15 }}
             >
               {renderHighlightedWords("Designed for everyday protection.", ["protection"])}
             </motion.div>
           </h2>
 
-          <p className="max-w-lg text-lg leading-8 text-slate">
+          <p className="max-w-2xl mx-auto text-lg leading-8 text-slate">
             Explore our collection of premium smart pendants where timeless
             craftsmanship meets intelligent protection.
           </p>
         </motion.div>
 
-        {/* RIGHT — cursor-tracked parallax + 3D tilt + radar signal + capability halo */}
-        <motion.div {...fadeUp} ref={heroRef} className="relative flex justify-center">
+        {/* BOTTOM VISUAL — Aceternity style perfectly centered image */}
+        <motion.div {...fadeUp} ref={heroRef} className="relative flex justify-center items-center h-[500px] w-full mt-4">
+          
           <RadarPulse tone="gold" size={460} reducedMotion={shouldReduceMotion} />
-          <CapabilityHalo items={FEATURES} radius={215} reducedMotion={shouldReduceMotion} />
+          <CapabilityHalo items={FEATURES} radius={230} reducedMotion={shouldReduceMotion} />
 
-          <motion.div
-            style={shouldReduceMotion ? undefined : { x: px, y: py }}
-            className="absolute inset-0 rounded-full bg-gold/10 blur-3xl scale-110"
-          />
-          <div className="absolute inset-x-8 bottom-8 h-8 rounded-full bg-ink/10 blur-xl opacity-40" />
-
-          {/* Pendant photo — pivots from the top edge, where a chain would attach,
-              so the loop reads as the necklace swaying on its chain rather than
-              the whole card rocking around its own center. No x/y drift: the
-              piece stays anchored in place, it only sways and tilts. */}
           <motion.div
             style={
               shouldReduceMotion
                 ? undefined
-                : { rotateX: tiltX, rotateY: tiltY, transformPerspective: 1200, transformOrigin: "50% 6%" }
+                : { rotateX: tiltX, rotateY: tiltY, x: px, y: py, transformPerspective: 1000 }
             }
-            animate={shouldReduceMotion ? undefined : { rotate: [-2.5, 2.5, -2.5] }}
-            whileHover={shouldReduceMotion ? undefined : { scale: 1.03 }}
-            transition={{ duration: 5.5, repeat: Infinity, ease: EASE }}
-            className="relative z-10"
+            className="relative z-10 flex items-center justify-center"
           >
-            <div className="relative overflow-hidden rounded-[28px]">
-              <img
+            {/* Premium sleek container framing the image */}
+            <div className="relative flex items-center justify-center overflow-hidden rounded-[32px] border border-white/5 bg-white/[0.02] p-10 backdrop-blur-sm shadow-[0_30px_60px_rgba(0,0,0,0.4)] before:absolute before:inset-0 before:bg-gradient-to-br before:from-white/10 before:to-transparent before:opacity-20">
+              
+              {/* Perfectly sized image */}
+              <motion.img
+                animate={shouldReduceMotion ? undefined : { y: [-4, 4, -4] }}
+                transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
                 src={ASSETS.pendants.classicTeardrop.heroImage}
                 alt="TrakID Pendant"
-                className="relative z-10 w-[340px] lg:w-[430px]"
+                className="relative z-10 mx-auto w-[200px] md:w-[240px] lg:w-[280px] object-contain drop-shadow-[0_20px_30px_rgba(0,0,0,0.5)]"
               />
-              {/* Diagonal glare sweep across the pendant, looping */}
+
+              {/* Diagonal glare sweep */}
               {!shouldReduceMotion && (
                 <motion.div
-                  animate={{ x: ["-150%", "150%"] }}
-                  transition={{ duration: 3.5, repeat: Infinity, repeatDelay: 2, ease: "easeInOut" }}
-                  className="pointer-events-none absolute inset-y-0 w-1/3 -skew-x-12 bg-gradient-to-r from-transparent via-white/40 to-transparent z-20"
+                  animate={{ x: ["-200%", "200%"] }}
+                  transition={{ duration: 4, repeat: Infinity, repeatDelay: 3, ease: "easeInOut" }}
+                  className="pointer-events-none absolute inset-y-0 w-1/2 -skew-x-12 bg-gradient-to-r from-transparent via-white/10 to-transparent z-20"
                 />
               )}
             </div>
@@ -504,13 +475,12 @@ export default function Anatomy() {
 
       {/* ==========================================================
                       COLLECTION TITLE + FILTER + GRID
-                      (cursor spotlight wraps this whole block)
       ========================================================== */}
 
       <div
         ref={collectionRef}
         onMouseMove={handleCollectionMove}
-        className="relative mt-36"
+        className="relative mt-36 z-10"
       >
         {!shouldReduceMotion && (
           <motion.div
@@ -535,7 +505,6 @@ export default function Anatomy() {
             discreet smart safety technology.
           </p>
 
-          {/* Filter pills — magnetic hover pull + shared layout pill */}
           <div className="mt-10 flex justify-center gap-3">
             {FILTERS.map((label) => {
               const active = activeFilter === label;
@@ -565,14 +534,6 @@ export default function Anatomy() {
             })}
           </div>
         </motion.div>
-
-        {/* ==========================================================
-                COLLECTION STACK — scroll-pinned card reveal.
-                The section is pinned (sticky) for one screen-height per
-                card. Card 1 fills the screen first; scrolling brings the
-                next card up from below to cover it completely, and
-                scrolling back up reverses the sequence.
-        ========================================================== */}
 
         <div
           ref={stackScrollRef}
@@ -604,136 +565,8 @@ export default function Anatomy() {
         </div>
       </div>
 
-      {/* Kinetic marquee of collection names — texture between grid and features */}
       <div className="border-y border-gold/15 py-6 mb-28 -mx-6 lg:-mx-20">
         <Marquee items={marqueeNames} />
-      </div>
-
-      {/* ==========================================================
-                    FEATURE INTRO
-      ========================================================== */}
-
-      <div className="mt-32">
-        <motion.div {...fadeUp} className="mb-12 text-center">
-          <p className="font-mono uppercase tracking-[0.35em] text-accent text-sm">
-            ENGINEERED FOR EVERYDAY LIFE
-          </p>
-
-          <h3 className="mt-5 font-display text-4xl text-ink">
-            <TextGenerate text="Built for comfort. Designed for protection." />
-          </h3>
-
-          <p className="mt-4 max-w-2xl mx-auto text-lg leading-8 text-slate">
-            Every TrakID pendant combines premium materials with reliable
-            technology, making it comfortable enough to wear and dependable
-            enough to protect.
-          </p>
-        </motion.div>
-
-        {/* ==========================================================
-                    FEATURE STRIP — cards flow continuously left → right,
-                    pausing on hover so a reader can stop and look
-        ========================================================== */}
-
-        <motion.div
-          ref={stripRef}
-          {...fadeUp}
-          className="group relative rounded-[32px] border border-gold/20 bg-white/60 backdrop-blur-md overflow-hidden"
-        >
-          <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold/50 to-transparent opacity-70 z-10" />
-
-          {/* Traveling signal pulse — a data packet running the length of the strip,
-              on-theme for the "LTE Connected / always reachable" feature it sits above */}
-          {!shouldReduceMotion && stripInView && (
-            <motion.span
-              initial={{ left: "0%", opacity: 0 }}
-              animate={{ left: ["0%", "100%"], opacity: [0, 1, 1, 0] }}
-              transition={{ duration: 3.2, repeat: Infinity, ease: "linear", repeatDelay: 0.6 }}
-              className="pointer-events-none absolute top-0 z-20 h-2 w-2 -translate-y-1/2 rounded-full bg-gold shadow-[0_0_12px_rgba(201,166,107,0.85)]"
-            />
-          )}
-
-          <div
-            className="relative overflow-hidden"
-            style={{
-              WebkitMaskImage: "linear-gradient(to right, transparent, black 6%, black 94%, transparent)",
-              maskImage: "linear-gradient(to right, transparent, black 6%, black 94%, transparent)",
-            }}
-          >
-            <div className={`flex w-max ${shouldReduceMotion ? "" : "trakid-feature-track"}`}>
-              {(shouldReduceMotion ? FEATURES : [...FEATURES, ...FEATURES]).map((feature, index) => {
-                const Icon = feature.icon;
-                return (
-                  <motion.div
-                    key={`${feature.title}-${index}`}
-                    initial="rest"
-                    whileHover="hover"
-                    style={{ width: 300, minWidth: 300, flexShrink: 0 }}
-                    className="relative group/card border-r border-gold/15 overflow-hidden"
-                  >
-                    {/* Sweeping gold highlight on hover */}
-                    <motion.div
-                      variants={{ rest: { x: "-100%" }, hover: { x: "100%" } }}
-                      transition={{ duration: 0.9, ease: EASE }}
-                      className="pointer-events-none absolute inset-0 bg-gradient-to-r from-transparent via-gold/10 to-transparent z-0"
-                    />
-
-                    <motion.div
-                      initial={shouldReduceMotion ? false : { opacity: 0, y: 18 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true, margin: "-80px" }}
-                      transition={{ duration: 0.45, delay: (index % FEATURES.length) * 0.06, ease: EASE }}
-                      className="relative z-10 px-10 py-8 text-center transition-colors duration-300 group-hover/card:bg-gold/5"
-                    >
-                      <div className="relative mb-5 flex justify-center">
-                        {!shouldReduceMotion && (
-                          <motion.span
-                            animate={{ scale: [1, 1.9], opacity: [0.45, 0] }}
-                            transition={{ duration: 2.2, repeat: Infinity, ease: "easeOut", delay: (index % FEATURES.length) * 0.25 }}
-                            className="absolute h-14 w-14 rounded-full border border-gold/40"
-                          />
-                        )}
-                        <motion.div
-                          animate={shouldReduceMotion ? undefined : { y: [0, -3, 0] }}
-                          transition={{
-                            duration: 3.5,
-                            delay: (index % FEATURES.length) * 0.18,
-                            repeat: Infinity,
-                            ease: EASE,
-                          }}
-                          className="relative flex h-14 w-14 items-center justify-center rounded-full border border-gold/20 bg-gold/5 transition-all duration-300 group-hover/card:border-gold/40 group-hover/card:bg-gold/10"
-                        >
-                          <Icon size={24} strokeWidth={1.75} className="text-accent" />
-                        </motion.div>
-                      </div>
-
-                      <StatNumber value={feature.stat} suffix={feature.suffix} inView={stripInView} />
-
-                      <h4 className="mt-2 font-display text-xl text-ink">{feature.title}</h4>
-
-                      <p className="mt-2 leading-7 text-slate text-sm">{feature.subtitle}</p>
-                    </motion.div>
-                  </motion.div>
-                );
-              })}
-            </div>
-          </div>
-
-          {!shouldReduceMotion && (
-            <style>{`
-              .trakid-feature-track {
-                animation: trakidFeatureFlow 42s linear infinite;
-              }
-              .trakid-feature-track:hover {
-                animation-play-state: paused;
-              }
-              @keyframes trakidFeatureFlow {
-                from { transform: translateX(0); }
-                to { transform: translateX(-50%); }
-              }
-            `}</style>
-          )}
-        </motion.div>
       </div>
 
       <Divider />
