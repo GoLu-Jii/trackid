@@ -3,12 +3,17 @@
 // smooth scroll, renders section slots in order. Section developers
 // uncomment their imports as they build.
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Lenis from 'lenis';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { TrackProvider } from './context/TrackContext';
-import Divider from './components/Divider';
+import StoryProgress from './components/StoryProgress';
+import StoryThread from './components/StoryThread';
+import SideRail from './components/SideRail';
+import WipeReveal from './components/WipeReveal';
+import Preloader from './components/Preloader';
+import { COPY } from './content/copy';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -35,11 +40,16 @@ import TheBelief from './sections/04-TheBelief/TheBelief';
 import Anatomy from './sections/04B-Anatomy/Anatomy';
 import WatchedOver from './sections/05-WatchedOver/WatchedOver';
 import FeatureShowcase from './sections/04C-FeatureShowcase/FeatureShowcase';
+import TheVows from './sections/06D-TheVows/TheVows';
 import Constellation from './sections/06C-Constellation/Constellation';
 import TheInvitation from './sections/06-TheInvitation/TheInvitation';
 import Closing from './sections/07-Closing/closing';
 
 function App() {
+  // The site mounts (and loads assets) BEHIND the preloader; the hero's
+  // pendant-drop unveiling only starts once the preloader hands off.
+  const [booted, setBooted] = useState(false);
+
   // ---------------------------------------------------------------
   // Lenis smooth-scroll — initialized once at the App root.
   // Synced with GSAP ScrollTrigger so pinning and scrubbed timelines
@@ -81,43 +91,57 @@ function App() {
     <TrackProvider>
       <div className="bg-parchment text-ink font-body antialiased min-h-screen">
 
+        {/* Loading screen — sits above everything until the site is ready */}
+        {!booted && <Preloader onComplete={() => setBooted(true)} />}
+
+        {/* Global story spine: top progress bar + chapter rail */}
+        <StoryProgress />
+
+        {/* OSOS-style fixed left rail + fullscreen chapter menu */}
+        <SideRail />
+
         {/* ============================================================ */}
         {/* SECTION SLOTS — uncomment as each section is built.          */}
         {/* The Divider component goes between each section boundary.    */}
         {/* ============================================================ */}
 
-        {/* Prologue */}
-        <Hero />
+        {/* Prologue — unveiling starts when the preloader hands off */}
+        <Hero start={booted} />
 
         {/* Chapter 1 — The Secret */}
         <Reveal />
-        <Divider className="text-gold/60" />
+        <StoryThread bridge={COPY.story.threads.toMoment} />
 
         {/* Chapter 2 — The Moment */}
         <TheMoment />
-        <Divider className="text-gold/60" />
+        <StoryThread />
 
         {/* Chapter 3 — The Truth */}
         <TheBelief />
-        <Divider className="text-gold/60" />
+        <StoryThread bridge={COPY.story.threads.toCompanions} />
 
         {/* Chapter 4 — The Companions */}
         <Anatomy />
-        <Divider className="text-gold/60" />
+        <StoryThread bridge={COPY.story.threads.toWatchedOver} />
 
         {/* Chapter 5 — The Day, Watched Over */}
         <WatchedOver />
-        <Divider className="text-gold/60" />
+        <StoryThread bridge={COPY.story.threads.toPromise} />
 
         {/* Chapter 6 — The Promise, Kept */}
         <FeatureShowcase />
-        <Divider className="text-gold/60" />
+
+        {/* The Vows — poster statements (OSOS-style stunts) */}
+        <TheVows />
+        <StoryThread />
 
         {/* Interlude — the particle pendant, statements riding the scroll */}
         <Constellation />
 
-        {/* Chapter 7 — The Beginning */}
-        <TheInvitation />
+        {/* Chapter 7 — The Beginning, revealed by a deep-plum wipe */}
+        <WipeReveal panelClass="bg-stone">
+          <TheInvitation />
+        </WipeReveal>
 
         {/* Epilogue */}
         <Closing />

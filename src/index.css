@@ -248,3 +248,56 @@ html::-webkit-scrollbar {
       0 0 200px rgba(168, 28, 75, 0.5);
   }
 }
+
+/* ==========================================================
+   OUTLINE TEXT — OSOS "FLEXIBLE"-style stroked display type
+========================================================== */
+.text-outline {
+  -webkit-text-stroke: 1.5px rgba(201, 166, 107, 0.28);
+  color: transparent;
+}
+
+.text-outline-bright {
+  -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.45);
+  color: transparent;
+  text-shadow: 0 0 40px rgba(201, 166, 107, 0.22);
+}
+
+/* ==========================================================
+   PREMIUM DETAILS — sticker shine sweep
+========================================================== */
+.sticker-shine {
+  position: relative;
+  overflow: hidden;
+}
+.sticker-shine::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(115deg, transparent 32%, rgba(255,255,255,0.5) 50%, transparent 68%);
+  transform: translateX(-130%);
+  animation: stickerShine 3.2s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes stickerShine {
+  0%, 55% { transform: translateX(-130%); }
+  100%    { transform: translateX(130%); }
+}
+
+/* ==========================================================
+   FULLSCREEN MENU — outline/filled row swap (OSOS-style)
+========================================================== */
+.menu-item {
+  -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.5);
+  color: transparent;
+  transition: color 0.35s ease, -webkit-text-stroke-color 0.35s ease, letter-spacing 0.35s ease;
+}
+.menu-item:hover,
+.menu-item.menu-item-solid {
+  color: #fff;
+  -webkit-text-stroke-color: transparent;
+}
+.menu-item-solid:hover {
+  -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.5);
+  color: transparent;
+}

@@ -317,16 +317,26 @@ export const COPY = {
   story: {
     // Kinetic copy — lines are arrays of segments so specific words can be
     // wrapped in sticker chips: { t: 'word', sticker: 'gold'|'pink'|'ghost' }.
+    // Chapter Two is a minute-by-minute timeline: each beat is a timestamp
+    // plus one thought, escalating to 3:42.
     moment: {
       marker: 'Chapter Two — The Moment',
       day: 'A Tuesday',
-      clock: [{ t: '3:42', sticker: 'gold' }, { t: 'PM' }],
-      lines: [
-        [{ t: 'The bell rang at' }, { t: '3:30.', sticker: 'ghost' }],
-        [{ t: 'It’s 3:42, and she isn’t' }, { t: 'home', sticker: 'pink' }, { t: 'yet.' }],
-        [{ t: 'Twelve minutes is nothing.' }],
-        [{ t: 'Twelve minutes is' }, { t: 'everything.', sticker: 'gold' }],
+      intro: [
+        { t: 'The twelve' },
+        { t: 'minutes', sticker: 'gold' },
+        { t: 'every parent knows.' },
       ],
+      beats: [
+        { time: '3:30 PM', segments: [{ t: 'The bell rang.' }] },
+        { time: '3:34 PM', segments: [{ t: 'Her friends are already home.' }] },
+        { time: '3:38 PM', segments: [{ t: 'You check your phone.' }, { t: 'Nothing.', sticker: 'ghost' }] },
+        { time: '3:42 PM', segments: [{ t: 'And she isn’t' }, { t: 'home', sticker: 'pink' }, { t: 'yet.' }] },
+      ],
+      twist: {
+        nothing:    [{ t: 'Twelve minutes is' }, { t: 'nothing.', sticker: 'ghost' }],
+        everything: [{ t: 'Twelve minutes is' }, { t: 'everything.', sticker: 'gold' }],
+      },
       resolution:
         'Every parent knows this silence. We built TrakID so it never has to last longer than a glance.',
       resolutionAccents: ['never', 'a', 'glance.'],
@@ -370,6 +380,10 @@ export const COPY = {
     invitation: {
       marker: 'Chapter Seven — The Beginning',
       headline: 'Every story like this begins with a choice.',
+      headlineKinetic: [
+        { t: 'Every story like this begins with a' },
+        { t: 'choice.', sticker: 'gold' },
+      ],
       subhead: 'Tell us whose story you’re writing.',
       audiences: {
         family: {
@@ -396,6 +410,45 @@ export const COPY = {
       proof:   'Chapter Six — The Promise, Kept',
       closing: 'Epilogue',
     },
+
+    // The golden thread — narrative hand-off lines between chapters,
+    // rendered by StoryThread (the comet rail that stitches the
+    // whole story together). Omitted = thread with no words.
+    threads: {
+      toMoment:     'Because of one moment every parent knows —',
+      toCompanions: 'So we made protection something she’d choose —',
+      toWatchedOver:'And here is the day it changes —',
+      toPromise:    'None of it works if it doesn’t last —',
+    },
+
+    // THE VOWS — OSOS-style poster statements (brand promises shouted
+    // at full size). Rendered by sections/06D-TheVows.
+    vows: {
+      peace:     { word: 'PEACE OF MIND', line: 'Your calm is the product.' },
+      always:    { word: 'ALWAYS ON',     line: 'Protection that doesn’t clock out.' },
+      encrypted: { word: 'ENCRYPTED',     line: 'Her location is hers — and yours. No one else’s.' },
+      time:      { label: 'Battery', word1: 'SEVEN', word2: 'DAYS', line: 'One charge. A full week of knowing she’s safe.' },
+    },
+
+    // Fixed side rail + fullscreen menu
+    rail: {
+      email: 'hello@trakid.com',
+      snake: 'TRAKID — GUARDIAN JEWELLERY — ',
+    },
+
+    // Global story navigation — powers the fixed progress rail.
+    // ids must match the id="" on each section element.
+    nav: [
+      { id: 'reveal',         label: 'The Secret' },
+      { id: 'the-moment',     label: 'The Moment' },
+      { id: 'the-belief',     label: 'The Truth' },
+      { id: 'anatomy',        label: 'The Companions' },
+      { id: 'watched-over',   label: 'Watched Over' },
+      { id: 'the-promise',    label: 'The Promise' },
+      { id: 'constellation',  label: 'Interlude' },
+      { id: 'the-invitation', label: 'The Beginning' },
+      { id: 'epilogue',       label: 'Epilogue' },
+    ],
 
     // Interlude — the particle pendant (OSOS-key-style pinned sequence).
     // Each statement tints the constellation: silver → gold → safe green.
