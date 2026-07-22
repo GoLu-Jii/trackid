@@ -100,8 +100,8 @@ function CascadeLine({ segments, className = '', strike = false }) {
       {words.map(({ w, sticker }, i) => (
         <span key={i} className="inline-block overflow-hidden align-bottom mr-[0.26em] pb-[0.1em]">
           <motion.span
-            initial={{ y: '110%', opacity: 0 }}
-            whileInView={{ y: 0, opacity: 1 }}
+            initial={{ y: '110%', opacity: 0, filter: 'blur(7px)' }}
+            whileInView={{ y: 0, opacity: 1, filter: 'blur(0px)' }}
             viewport={{ once: false, amount: 0.6 }}
             transition={{ duration: 0.5, ease: EASE, delay: i * 0.06 }}
             className={`relative inline-block ${sticker ? STICKER_CLASS[sticker] : ''} ${

@@ -110,13 +110,13 @@ export default function TheInvitation() {
             {HEADLINE_WORDS.map(({ w, sticker }, i) => (
               <span key={i} className="inline-block overflow-hidden align-bottom mr-[0.26em] pb-[0.1em]">
                 <motion.span
-                  initial={{ y: '110%', opacity: 0 }}
-                  whileInView={{ y: 0, opacity: 1 }}
+                  initial={{ y: '110%', opacity: 0, filter: 'blur(7px)' }}
+                  whileInView={{ y: 0, opacity: 1, filter: 'blur(0px)' }}
                   viewport={{ once: false, amount: 0.4 }}
                   transition={{ duration: 0.55, ease: EASE, delay: i * 0.05 }}
                   className={`inline-block ${
                     sticker === 'gold'
-                      ? 'rounded-xl md:rounded-2xl px-[0.32em] py-[0.02em] bg-gold text-parchment -rotate-2 shadow-[0_6px_24px_rgba(201,166,107,0.35)]'
+                      ? 'sticker-shine rounded-xl md:rounded-2xl px-[0.32em] py-[0.02em] bg-gold text-parchment -rotate-2 shadow-[0_6px_24px_rgba(201,166,107,0.35)]'
                       : ''
                   }`}
                 >
@@ -178,8 +178,8 @@ export default function TheInvitation() {
                                 {a.copy.headline.split(' ').map((w, i) => (
                                   <span key={`${w}-${i}`} className="inline-block overflow-hidden align-bottom mr-[0.24em]">
                                     <motion.span
-                                      initial={{ y: '110%', opacity: 0 }}
-                                      animate={{ y: 0, opacity: 1 }}
+                                      initial={{ y: '110%', opacity: 0, filter: 'blur(6px)' }}
+                                      animate={{ y: 0, opacity: 1, filter: 'blur(0px)' }}
                                       transition={{ duration: 0.45, ease: EASE, delay: 0.15 + i * 0.035 }}
                                       className="inline-block"
                                     >

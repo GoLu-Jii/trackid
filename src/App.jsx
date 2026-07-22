@@ -8,10 +8,11 @@ import Lenis from 'lenis';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { TrackProvider } from './context/TrackContext';
-import Divider from './components/Divider';
 import StoryProgress from './components/StoryProgress';
+import StoryThread from './components/StoryThread';
 import WipeReveal from './components/WipeReveal';
 import Preloader from './components/Preloader';
+import { COPY } from './content/copy';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -104,27 +105,27 @@ function App() {
 
         {/* Chapter 1 — The Secret */}
         <Reveal />
-        <Divider className="text-gold/60" />
+        <StoryThread bridge={COPY.story.threads.toMoment} />
 
         {/* Chapter 2 — The Moment */}
         <TheMoment />
-        <Divider className="text-gold/60" />
+        <StoryThread />
 
         {/* Chapter 3 — The Truth */}
         <TheBelief />
-        <Divider className="text-gold/60" />
+        <StoryThread bridge={COPY.story.threads.toCompanions} />
 
         {/* Chapter 4 — The Companions */}
         <Anatomy />
-        <Divider className="text-gold/60" />
+        <StoryThread bridge={COPY.story.threads.toWatchedOver} />
 
         {/* Chapter 5 — The Day, Watched Over */}
         <WatchedOver />
-        <Divider className="text-gold/60" />
+        <StoryThread bridge={COPY.story.threads.toPromise} />
 
         {/* Chapter 6 — The Promise, Kept */}
         <FeatureShowcase />
-        <Divider className="text-gold/60" />
+        <StoryThread />
 
         {/* Interlude — the particle pendant, statements riding the scroll */}
         <Constellation />

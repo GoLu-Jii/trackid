@@ -411,6 +411,16 @@ export const COPY = {
       closing: 'Epilogue',
     },
 
+    // The golden thread — narrative hand-off lines between chapters,
+    // rendered by StoryThread (the comet rail that stitches the
+    // whole story together). Omitted = thread with no words.
+    threads: {
+      toMoment:     'Because of one moment every parent knows —',
+      toCompanions: 'So we made protection something she’d choose —',
+      toWatchedOver:'And here is the day it changes —',
+      toPromise:    'None of it works if it doesn’t last —',
+    },
+
     // Global story navigation — powers the fixed progress rail.
     // ids must match the id="" on each section element.
     nav: [
